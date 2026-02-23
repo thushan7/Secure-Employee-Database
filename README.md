@@ -1,8 +1,3 @@
-## 0) Get the code
-Download/unzip the submission (or open the folder you received) and `cd` into it:
-
-```bash
-cd cis3530-a4b-team
 
 # 1) venv + deps
 ```bash
@@ -67,7 +62,7 @@ flask --app app:app run --debug
 # visit http://127.0.0.1:5000/login
 
 
-## Excel Import (Bonus +1.0)
+## Excel Import
 
 **What it does:** Admins can upload a validated **.xlsx** file on a project’s detail page to insert/update (“upsert”) hours for that project.  
 Valid rows are applied; invalid rows are skipped with a clear reason shown in a banner at the top of the page.
@@ -100,7 +95,7 @@ For each row:
 - If both are valid, the app **upserts** into `Works_On` for that `(SSN, current Pno)`.  
 - A banner summarizes success (e.g., “Imported 7 row(s)”) and lists the first few problems, if any (e.g., “Row 2: Hours must be a positive number”).
 
-### How to use / demo steps
+### How to use
 1. Log in as admin (see *seed_users.sql* for credentials).
 2. Go to **Projects → \<pick a project>**.
 3. Click **Choose File**, select your `.xlsx`, then **Import Excel**.
