@@ -1,0 +1,2 @@
+INSERT INTO app_user(username,password_hash,role) VALUES ('admin','scrypt:32768:8:1$0QjsAvkhQSb7G5j4$a92d08525748bcc0f6c023bbefc80fac44386fea25306a506c1bedf3789106d49bb18317b42e3a2e27d8a50fdcfeec5a9de907b8894618f15c93e00dafe1616a','admin') ON CONFLICT (username) DO NOTHING;
+INSERT INTO app_user(username,password_hash,role) VALUES ('viewer','scrypt:32768:8:1$s87xftoGqylNhlDC$03e253c987e69294223a5744a22d4b42623de003e692ee46220d254a9816ce671c01fb6f77cb902654b71434ba4b67d3705dec60852911dd404872d91ea3f984','viewer') ON CONFLICT (username) DO NOTHING;

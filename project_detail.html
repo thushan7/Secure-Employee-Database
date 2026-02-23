@@ -1,0 +1,64 @@
+{# project_detail.html #}
+{% extends "base.html" %}
+{% block title %}Project {{ pno }}{% endblock %}
+{% block content %}
+<h1>Project {{ pno }}</h1>
+
+{% if session.get('role') == 'admin' %}
+<form method="post" style="margin:12px 0">
+  <label>Employee
+    <select id="essn" name="essn" required>
+      <option value="">-- select employee --</option>
+      {% for e in employees %}
+        <option value="{{ e.ssn }}">{{ e.full_name }} ({{ e.ssn }})</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Hours <input type="number" step="0.25" min="0.25" name="hours" required></label>
+  <button type="submit">Add Hours</button>
+  <span class="muted">Tip: click a row below to copy its SSN into the selector.</span>
+</form>
+
+<hr style="margin:18px 0">
+
+  <form action="{{ url_for('project_import_hours', pno=pno) }}"
+        method="post" enctype="multipart/form-data"
+        style="display:flex; gap:8px; align-items:center;">
+    <input type="file" name="file" accept=".xlsx" required>
+    <button type="submit">Import Excel</button>
+  </form>
+
+  <span class="muted">Template columns: <code>SSN</code>, <code>Hours</code>. Rows upsert into this project.</span>
+</div>
+{% endif %}
+
+{% if msg %}<div class="flash">{{ msg }}</div>{% endif %}
+
+<table>
+  <thead>
+    <tr><th>Employee</th><th>SSN</th><th>Hours</th></tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr data-ssn="{{ r.ssn }}">
+        <td>{{ r.employee }}</td>
+        <td>{{ r.ssn }}</td>
+        <td>{{ "%.1f"|format(r.hours or 0) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if session.get('role') == 'admin' %}
+<script>
+  for (const tr of document.querySelectorAll('tbody tr')) {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', () => {
+      const sel = document.getElementById('essn');
+      sel.value = tr.dataset.ssn;
+      sel.focus();
+    });
+  }
+</script>
+{% endif %}
+{% endblock %}

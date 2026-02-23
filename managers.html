@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Managers{% endblock %}
+{% block content %}
+<h1>Managers</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Manager</th>
+      <th>Department</th>
+      <th>Headcount</th>
+      <th>Total Project Hours</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r.manager_name }}</td>
+      <td>{{ r.dept_name }}</td>
+      <td>{{ r.headcount }}</td>
+      <td>{{ "%.2f"|format(r.total_hours or 0) }}</td>
+    </tr>
+    {% endfor %}
+    {% if not rows %}
+      <tr><td colspan="4" class="muted">No data.</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Employees</h1>
+
+<form method="get" style="margin-bottom:12px; display:flex; gap:12px; align-items:center;">
+  <label>Dept #
+  <input name="dept" type="number" min="1" step="1" value="{{ dept or '' }}" size="4">
+</label>
+  <label>Name <input name="q" value="{{ q or '' }}"></label>
+  <label>Sort
+    <select name="sort">
+      {% for k in order_keys %}
+        <option value="{{k}}" {% if sort==k %}selected{% endif %}>{{k}}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button>Apply</button>
+
+  <!-- CSV export (respects current filters/sort) -->
+  <a href="{{ url_for('employees_csv', dept=dept, q=q, sort=sort) }}"
+     style="margin-left:auto; padding:6px 10px; border:1px solid #444; border-radius:6px; text-decoration:none;">
+    Download CSV
+  </a>
+</form>
+
+{% if session.role == 'admin' %}
+  <p style="margin: 8px 0;">
+    <a href="{{ url_for('employee_new') }}">+ Add Employee</a>
+  </p>
+{% endif %}
+
+<table>
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Department</th>
+      <th style="text-align:right">#Dependents</th>
+      <th style="text-align:right">#Projects</th>
+      <th style="text-align:right">Total Hours</th>
+      {% if session.role == 'admin' %}<th>Actions</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.full_name }}</td>
+        <td>{{ r.dept_name or 'N/A' }}</td>
+        <td style="text-align:right">{{ r.num_dependents }}</td>
+        <td style="text-align:right">{{ r.num_projects }}</td>
+        <td style="text-align:right">{{ '%.2f'|format(r.total_hours or 0) }}</td>
+
+        {% if session.role == 'admin' %}
+          <td>
+            <a href="{{ url_for('employee_edit', ssn=r.ssn) }}">Edit</a>
+            <form action="{{ url_for('employee_delete_route', ssn=r.ssn) }}"
+                  method="post" style="display:inline"
+                  onsubmit="return confirm('Delete {{ r.full_name }}?');">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        {% endif %}
+      </tr>
+    {% else %}
+      <tr><td colspan="{% if session.role == 'admin' %}6{% else %}5{% endif %}">No employees found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

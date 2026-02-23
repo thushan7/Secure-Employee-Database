@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Projects</h1>
+<form method="get" style="margin-bottom:12px">
+  <label>Sort
+    <select name="sort">
+      {% for k in order_keys %}
+        <option value="{{k}}" {% if sort==k %}selected{% endif %}>{{k}}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button>Apply</button>
+</form>
+<table>
+  <thead><tr><th>Name</th><th>Owning Dept</th><th>Headcount</th><th>Total Hours</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td><a href="/projects/{{ r.pnumber }}">{{ r.pname }}</a></td>
+        <td>{{ r.dept_name or 'N/A' }}</td>
+        <td style="text-align:right">{{ r.headcount }}</td>
+        <td style="text-align:right">{{ '%.2f'|format(r.total_hours or 0) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4">No projects.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

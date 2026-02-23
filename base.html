@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}work{% endblock %}</title>
+    <style>
+      body{font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial;}
+      a{color:rebeccapurple;text-decoration:none}
+      a:hover{text-decoration:underline}
+      nav{display:flex;gap:24px;margin:18px 0}
+      table{border-collapse:collapse;width:100%;max-width:900px}
+      th,td{border:1px solid #ddd;padding:10px;text-align:left}
+      th{background:#f3f3f9}
+      .flash{background:#fdeaa8;padding:12px;margin:10px 0;border-radius:8px}
+      .right{float:right}
+      .muted{color:#777}
+      input,select,button{font:inherit;padding:6px 8px}
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="{{ url_for('employees') }}">Employees</a>
+      <a href="{{ url_for('projects') }}">Projects</a>
+      <a href="{{ url_for('managers') }}">Managers</a>
+      <a class="right" href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    {% with msgs = get_flashed_messages() %}
+      {% if msgs %}<div class="flash">{{ msgs|join(', ') }}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </body>
+</html>
